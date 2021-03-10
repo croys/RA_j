@@ -5,6 +5,7 @@ import java.util.List;
 
 import static raj.Type.*;
 import static raj.ColDef.*;
+import static raj.TypeT.*;
 
 public class Test {
     public static void main(String[] args) {
@@ -42,13 +43,7 @@ public class Test {
         TypeList< Integer, TypeList< Double, TypeListNil >> my_val;
 
         StorageFactory sf = new StorageFactory();
-        //sf.make( Integer.class );
-        //sf.make( Double.class );
-
-        // StorageFactory< Integer > int_factory = new StorageFactory< Integer >();
-        // int_factory.make(Integer.class);
-                // StorageFactory< Integer > int_factory = new StorageFactory< Integer >();
-        // int_factory.make(Integer.class);
-
+        sf.make( tInt() );
+        sf.make( tDouble() );
     }
 }

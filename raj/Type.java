@@ -2,7 +2,12 @@ package raj;
 
 import java.lang.Comparable;
 
-public final class Type implements Comparable<Type> {
+// Simple mono-typed type values
+// See TypeT for typed (generic) values
+
+public final class Type
+    implements IPureValue, Comparable<Type> {
+
     public enum TyCon {
         VOID, BOOL, INT, FLOAT, DOUBLE, STRING, DATE, DATETIME, OBJECT
     }

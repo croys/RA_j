@@ -1,8 +1,5 @@
 package raj;
 
-// Immutable, typed access to storage
-
-public interface IStorageTyped<T> {
-    T       get( int idx );
-    int     size();
+public interface IStorageTyped<T>
+    extends IPure, IStorageTypedBase<T> {
 }

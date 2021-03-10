@@ -2,16 +2,16 @@ package raj;
 
 public class StorageFactory {
 
-    public final static IStorageM make(Class<?> _class) {
-
-        if ( _class == Integer.class ) {
-            System.out.println("Integer!");
-        }
-        if ( _class == Double.class ) {
+    public final static IStorageM make( TypeT<?> ty )
+    {
+        if ( ty.equals( TypeT.tInt() ) ) {
+            return new ColStorageAdapter<Integer>(
+                new ColStorageInt( 0 )
+            );
+        } else if ( ty.equals( TypeT.tDouble() ) ) {
             System.out.println("Double!");
         }
 
-
-        throw new NotImplementedException();
+        return null;
     }
 }

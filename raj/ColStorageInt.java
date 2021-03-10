@@ -1,7 +1,22 @@
 package raj;
 
-public class ColStorageInt {
- 
+public class ColStorageInt
+    implements
+        IStorageTyped<Integer>,
+        IStorageTypedM<Integer>
+    {
+
+    private int   m_capacity;
+    private int[] m_storage;
+    private int   m_size;
+
+    ColStorageInt( int capacity )
+    {
+        m_capacity  = capacity;
+        m_storage   = new int[capacity];
+        m_size      = 0;
+    }
+
     // IStorageTyped<Integer>
 
     public Integer get( int idx )
@@ -52,7 +67,5 @@ public class ColStorageInt {
     {
         throw new NotImplementedException();
     }
-
-
 
 }

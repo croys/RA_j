@@ -2,7 +2,8 @@ package raj;
 
 // Mutable, typed storage
 
-public interface IStorageTypedM<T> {
+public interface IStorageTypedM<T>
+    extends IStorageTypedBase<T> {
 
     void    setSize( int sz );
     void    add( T el );

@@ -2,7 +2,7 @@ package raj;
 
 // Mutable storage
 
-public interface IStorageM extends IStorage {
+public interface IStorageM extends IStorageBase {
     void    setSize( int sz );
     void    add( Object el );
     void    set( int idx, Object el );
