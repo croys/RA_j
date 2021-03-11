@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import static org.croys.raj.Type.*;
 import static org.croys.raj.ColDef.*;
@@ -69,7 +71,7 @@ public class Tests {
 
     @Test
     public void colStorageAdapter_basics() {
-        IStorageM s = StorageFactory.make( tInt() );
+        IStorageM s = StorageFactory.make( tInt().getType() );
 
         assertEquals( s.size(), 0);
 
@@ -89,5 +91,21 @@ public class Tests {
         assertEquals( s.get(0), 1 );
     }
 
+    @Test
+    public void relBuilder_basics() {
+        RelBuilder rb = new RelBuilder(cols);
+        assertEquals( cols, rb.cols() );
+        assertEquals( 0, rb.size());
+
+        Object vals[] = { 1, 1.0 };
+        rb.add( Arrays.asList( vals ) );
+
+        assertEquals( 1, rb.size() );
+        assertEquals( vals[ 0 ], rb.get( 0, 0 ) );
+        assertEquals( vals[ 1 ], rb.get( 0, 1 ) );
+
+        rb.set( 0, 1, 2.0 );
+        assertEquals( 2.0, rb.get( 0, 1 ) );
+    }
 
 }
