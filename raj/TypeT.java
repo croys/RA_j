@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 
     */
 
-public class TypeT<T> implements IPure /* IType */ {
+public class TypeT<T> implements IsPure /* IType */ {
 
     private Type m_ty;
 
@@ -38,6 +38,7 @@ public class TypeT<T> implements IPure /* IType */ {
     // Note: t prefix is to avoid issues with Double, etc..
 
     // FIXME: might want to prefix these with T to avoid conflict with Type statics
+
     private final static TypeT<Void> VOID = new TypeT<Void>( Type.VOID );
     public final static TypeT<Void> tVoid()
     {
@@ -74,7 +75,8 @@ public class TypeT<T> implements IPure /* IType */ {
         return DATE;
     }
 
-    private final static TypeT<OffsetDateTime> DATETIME = new TypeT<OffsetDateTime>( Type.DATETIME );
+    private final static TypeT<OffsetDateTime> DATETIME =
+        new TypeT<OffsetDateTime>( Type.DATETIME );
     public final static TypeT<OffsetDateTime> tDatetime()
     {
         return DATETIME;

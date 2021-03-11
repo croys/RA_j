@@ -1,5 +1,5 @@
 package raj;
 
 public interface IStorageTyped<T>
-    extends IPure, IStorageTypedBase<T> {
+    extends IsPure, IStorageTypedBase<T> {
 }

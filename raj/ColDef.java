@@ -4,7 +4,7 @@ import java.lang.Comparable;
 import java.lang.NullPointerException;
 
 public final class ColDef
-    implements IPureValue, Comparable<ColDef> {
+    implements IsPureValue, Comparable<ColDef> {
 
     ColDef( String name, Type ty )
     {

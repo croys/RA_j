@@ -7,11 +7,25 @@ public class StorageFactory {
         if ( ty.equals( TypeT.tInt() ) ) {
             return new ColStorageAdapter<Integer>(
                 new ColStorageInt( 0 )
-            );
+             );
         } else if ( ty.equals( TypeT.tDouble() ) ) {
-            System.out.println("Double!");
+            return new ColStorageAdapter<Double>(
+                new ColStorage<Double>( 0 )
+            );
         }
 
         return null;
     }
+
+    public final static IStorageTypedM<?> makeT( TypeT<?> ty )
+    {
+        if ( ty.equals( TypeT.tInt() ) ) {
+            return new ColStorageInt( 0 );
+        } else if ( ty.equals( TypeT.tDouble() ) ) {
+            return new ColStorage<Double>( 0 );
+        }
+
+        return null;
+    }
+
 }

@@ -1,60 +1,84 @@
 package raj;
 
-public class ColStorageInt
+public final class ColStorageInt
     implements
         IStorageTyped<Integer>,
         IStorageTypedM<Integer>
     {
 
-    private int   m_capacity;
-    private int[] m_storage;
-    private int   m_size;
+    // abstract out array creation...
+    // based on witness
+    private int[]   m_storage;
+    private int     m_size;
 
     ColStorageInt( int capacity )
     {
-        m_capacity  = capacity;
-        m_storage   = new int[capacity];
+        m_storage   = new int[ capacity ];
         m_size      = 0;
+    }
+
+    private final int getCapacity()
+    {
+        return m_storage.length;
+    }
+
+    private final void _ensureCapacity( int required )
+    {
+        int cap = m_size > 0 ? m_storage.length : 0;
+        if ( cap < required ) {
+            if ( cap == 0 ) {
+                cap = 1;
+            }
+            while ( cap < required ) {
+                cap *= 2;
+            }
+            int new_storage[] = new int[ cap ];
+            for ( int i = 0; i < m_size; ++i ) {
+                new_storage[ i ] = m_storage[ i ];
+            }
+            m_storage = new_storage;
+        }
     }
 
     // IStorageTyped<Integer>
 
     public Integer get( int idx )
     {
-        throw new NotImplementedException();
+        return m_storage[ idx ];
     }
 
     public int size()
     {
-        throw new NotImplementedException();
+        return m_size;
     }
 
     // IStorageTypedM<Integer>
 
     public void setSize( int sz )
     {
-        throw new NotImplementedException();
+        _ensureCapacity( sz );
+        m_size = sz;
     }
 
     public void add( Integer el )
     {
-        throw new NotImplementedException();
+        _ensureCapacity( m_size + 1 );
+        m_storage[ m_size++ ] = el;
     }
 
     public void set( int idx, Integer el )
     {
-        throw new NotImplementedException();
+        m_storage[ idx ] = el;
     }
-
 
     public int capacity()
     {
-        throw new NotImplementedException();
+        return getCapacity();
     }
 
     public void ensureCapacity( int minCap )
     {
-        throw new NotImplementedException();
+        _ensureCapacity( minCap );
     }
 
 
@@ -65,7 +89,19 @@ public class ColStorageInt
         ,int                    to_start
     )
     {
-        throw new NotImplementedException();
+        int len = from_end - from_start;
+        _ensureCapacity( m_size + len );
+        int j = to_start;
+        if ( ColStorageInt.class.isInstance( from ) ) {
+            ColStorageInt col = ColStorageInt.class.cast( from );
+            for ( int i = from_start; i < from_end; ++i ) {
+                m_storage[ j++ ] = col.m_storage[ i ];
+            }
+        } else {
+            for ( int i = from_start; i < from_end; ++i ) {
+                m_storage[ j++ ] = from.get( i );
+            }
+        }
     }
 
 }

@@ -4,12 +4,7 @@ import java.util.Vector;
 
 public class ColStorage<T> implements IStorageTypedM<T> {
 
-    private Vector<T> m_storage;
-
-    public ColStorage()
-    {
-        m_storage = new Vector<T>();
-    }
+    private Vector<T>   m_storage;
 
     public ColStorage( int initialCapacity )
     {

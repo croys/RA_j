@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 
-public class RelType implements IPureValue
+public class RelType implements IsPureValue
 {
     public RelType( Map<String, Type> col_map )
     {

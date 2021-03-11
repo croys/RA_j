@@ -6,7 +6,7 @@ import java.lang.Comparable;
 // See TypeT for typed (generic) values
 
 public final class Type
-    implements IPureValue, Comparable<Type> {
+    implements IsPureValue, Comparable<Type> {
 
     public enum TyCon {
         VOID, BOOL, INT, FLOAT, DOUBLE, STRING, DATE, DATETIME, OBJECT

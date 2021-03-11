@@ -3,43 +3,50 @@ package raj;
 public class ColStorageAdapter<T>
     implements IStorage, IStorageM
 {
+    private IStorageTypedM<T>   m_storage;
+
     ColStorageAdapter( IStorageTypedM<T> storage )
     {
-
+        m_storage   = storage;
     }
     
     // IStorage
     public Object get( int idx )
     {
-        throw new NotImplementedException();
+        return m_storage.get( idx );
     }
 
     public int size()
     {
-        throw new NotImplementedException();
+        return m_storage.size();
     }
 
     // IStorageM
     public void setSize( int sz )
     {
-        throw new NotImplementedException();
+        m_storage.setSize(sz);
     }
+
+    @SuppressWarnings("unchecked")
     public void add( Object el )
     {
-        throw new NotImplementedException();
+        m_storage.add( (T)el );
     }
+
+    @SuppressWarnings("unchecked")
     public void set( int idx, Object el )
     {
-        throw new NotImplementedException();
+        m_storage.set( idx, (T)el );
     }
+
 
     public int capacity()
     {
-        throw new NotImplementedException();
+        return m_storage.capacity();
     }
     public void ensureCapacity( int minCap )
     {
-        throw new NotImplementedException();
+        m_storage.ensureCapacity( minCap );
     }
 
     public void copy(
