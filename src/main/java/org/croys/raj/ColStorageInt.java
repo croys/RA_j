@@ -1,13 +1,10 @@
-package raj;
+package org.croys.raj;
 
 public final class ColStorageInt
     implements
-        IStorageTyped<Integer>,
-        IStorageTypedM<Integer>
-    {
-
-    // abstract out array creation...
-    // based on witness
+         IStorageTyped<Integer>
+        ,IStorageTypedM<Integer>
+{
     private int[]   m_storage;
     private int     m_size;
 

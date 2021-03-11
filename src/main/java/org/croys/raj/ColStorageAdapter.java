@@ -1,4 +1,4 @@
-package raj;
+package org.croys.raj;
 
 public class ColStorageAdapter<T>
     implements IStorage, IStorageM

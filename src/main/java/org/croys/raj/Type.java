@@ -1,4 +1,4 @@
-package raj;
+package org.croys.raj;
 
 import java.lang.Comparable;
 
@@ -6,7 +6,10 @@ import java.lang.Comparable;
 // See TypeT for typed (generic) values
 
 public final class Type
-    implements IsPureValue, Comparable<Type> {
+    implements
+         IsPureValue
+        ,Comparable<Type>
+{
 
     public enum TyCon {
         VOID, BOOL, INT, FLOAT, DOUBLE, STRING, DATE, DATETIME, OBJECT

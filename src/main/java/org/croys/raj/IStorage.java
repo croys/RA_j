@@ -1,4 +1,4 @@
-package raj;
+package org.croys.raj;
 
 
 // Immutable access to storage

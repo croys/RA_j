@@ -1,9 +1,12 @@
-package raj;
+package org.croys.raj;
 
 import java.util.Vector;
 
-public class ColStorage<T> implements IStorageTypedM<T> {
-
+public class ColStorage<T>
+    implements
+         IStorageTyped<T>
+        ,IStorageTypedM<T>
+{
     private Vector<T>   m_storage;
 
     public ColStorage( int initialCapacity )
@@ -11,7 +14,7 @@ public class ColStorage<T> implements IStorageTypedM<T> {
         m_storage = new Vector<T>( initialCapacity );
     }
 
-    // IStorage
+    // IStorageTyped<T>
 
     public final T get( int idx ) {
         return m_storage.get(idx);
@@ -21,7 +24,7 @@ public class ColStorage<T> implements IStorageTypedM<T> {
         return m_storage.size();
     }
 
-    // IStorageM
+    // IStorageTypedM<T>
 
     public final void setSize( int sz ) {
         m_storage.setSize(sz);

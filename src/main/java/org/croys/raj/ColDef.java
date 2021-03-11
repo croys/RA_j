@@ -1,11 +1,11 @@
-package raj;
+package org.croys.raj;
 
 import java.lang.Comparable;
 import java.lang.NullPointerException;
 
 public final class ColDef
-    implements IsPureValue, Comparable<ColDef> {
-
+    implements IsPureValue, Comparable<ColDef>
+{
     ColDef( String name, Type ty )
     {
         m_name = name;

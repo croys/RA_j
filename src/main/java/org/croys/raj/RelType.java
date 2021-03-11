@@ -1,4 +1,4 @@
-package raj;
+package org.croys.raj;
 
 import java.util.Map;
 import java.util.List;
