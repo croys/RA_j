@@ -39,10 +39,16 @@ public class TypeT<T> implements IsPure /* IType */ {
 
     // FIXME: might want to prefix these with T to avoid conflict with Type statics
 
-    private final static TypeT<Void> VOID = new TypeT<Void>( Type.VOID );
-    public final static TypeT<Void> tVoid()
+    private final static TypeT<Unit> UNIT = new TypeT<Unit>( Type.UNIT );
+    public final static TypeT<Unit> tUnit()
     {
-        return VOID;
+        return UNIT;
+    }
+
+    private final static TypeT<Boolean> BOOL = new TypeT<Boolean>( Type.BOOL );
+    public final static TypeT<Boolean> tBool()
+    {
+        return BOOL;
     }
 
     private final static TypeT<Integer> INT = new TypeT<Integer>( Type.INT );

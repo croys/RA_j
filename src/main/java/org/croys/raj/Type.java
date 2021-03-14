@@ -12,7 +12,7 @@ public final class Type
 {
 
     public enum TyCon {
-        VOID, BOOL, INT, FLOAT, DOUBLE, STRING, DATE, DATETIME, OBJECT
+        UNIT, BOOL, INT, FLOAT, DOUBLE, STRING, DATE, DATETIME, OBJECT
     }
 
     Type( TyCon tc )
@@ -48,7 +48,7 @@ public final class Type
 
     // Convenience
 
-    public static final Type VOID      = new Type( TyCon.VOID );
+    public static final Type UNIT      = new Type( TyCon.UNIT );
     public static final Type BOOL      = new Type( TyCon.BOOL );
     public static final Type INT       = new Type( TyCon.INT );
     public static final Type FLOAT     = new Type( TyCon.FLOAT );

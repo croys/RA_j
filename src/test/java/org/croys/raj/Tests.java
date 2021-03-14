@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import static org.croys.raj.Type.*;
 import static org.croys.raj.ColDef.*;
@@ -128,6 +127,12 @@ public class Tests {
     }
 
     @Test
+    public void colStorageDoubleArray_basics() {
+        IStorageTypedM<Double> s = new ColStorageDouble( 0 );
+        double_storage_basics( s );
+    }
+
+    @Test
     public void colStorageAdapter_basics() {
         IStorageM s = new ColStorageAdapter< Integer >( new ColStorageInt( 0 ) );
 
@@ -151,6 +156,14 @@ public class Tests {
 
     @Test
     public void storageFactory_basics() {
+        {
+            IStorageTypedM<Integer> s = StorageFactory.makeT( tInt() );
+            int_storage_basics( s );
+        }
+        {
+            IStorageTypedM<Double> s = StorageFactory.makeT( tDouble() );
+            double_storage_basics(s);
+        }
 
     }
 
