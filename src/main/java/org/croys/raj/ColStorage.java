@@ -8,10 +8,16 @@ public class ColStorage<T>
         ,IStorageTypedM<T>
 {
     private Vector<T>   m_storage;
+    private T           m_default;
 
-    public ColStorage( int initialCapacity )
+    public ColStorage( int initialCapacity, T defaultValue )
     {
-        m_storage = new Vector<T>( initialCapacity );
+        if ( defaultValue != null ) {
+            m_default = defaultValue;
+            m_storage = new Vector<T>( initialCapacity );
+        } else {
+            throw new IllegalArgumentException( "Null values are not allowed" );
+        }
     }
 
     // IStorageTyped<T>
@@ -27,15 +33,29 @@ public class ColStorage<T>
     // IStorageTypedM<T>
 
     public final void setSize( int sz ) {
+        int old_size = m_storage.size();
         m_storage.setSize(sz);
+        if ( sz > old_size ) {
+            for ( int i=old_size; i<sz; ++i ) {
+                m_storage.set( i, m_default );
+            }
+        }
     }
 
     public final void add( T el ) {
-        m_storage.add( el );
+        if ( el != null ) {
+            m_storage.add( el );
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     public final void set( int idx, T el ) {
-        m_storage.set( idx, el );
+        if ( el != null ) {
+            m_storage.set( idx, el );
+        } else {
+            throw new NullPointerException();
+        }
     }
     
     public final int capacity() {

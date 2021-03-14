@@ -1,6 +1,8 @@
 package org.croys.raj;
 
 import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -47,35 +49,91 @@ public class Tests {
         assertEquals( "[B : DOUBLE, A : INT]", cols3.toString() );
     }
 
-    @Test
-    public void colStorageInt_basics() {
-        ColStorageInt s = new ColStorageInt(0);
 
-        assertEquals( s.size(), 0);
 
-        s.ensureCapacity(1);
+    public void int_storage_basics( IStorageTypedM<Integer> s )
+    {
+        assertEquals( s.size(), 0 );
+
+        s.ensureCapacity( 1 );
         assertTrue( s.capacity() >= 1 );
+        assertEquals( 0, s.size() );
 
         s.setSize( 2 );
         assertEquals( s.size(), 2 );
         assertTrue( s.capacity() >= 2 );
-        assertEquals( s.get( 0 ), Integer.valueOf(0) );
-        //assertTrue( s.get( 0 ) == 0 );
-        
-        s.set(0, 1);
-        assertEquals( s.get( 0 ), Integer.valueOf(1) );
+        assertEquals( Integer.valueOf( 0 ), s.get( 0 ) );
+
+        s.set( 0, 1 );
+        assertEquals( Integer.valueOf( 1 ), s.get( 0 ) );
+
+        assertThrows( NullPointerException.class, () -> s.set( 0, null ) );
 
         s.ensureCapacity( 100 );
-        assertEquals( s.get( 0 ), Integer.valueOf(1) );
+        assertEquals( Integer.valueOf( 1 ), s.get( 0 ) );
+
+        s.add( 3 );
+        assertEquals( 3, s.size() );
+        assertEquals( Integer.valueOf( 3 ) , s.get( 2 ) );
+
+        assertThrows( NullPointerException.class, () -> s.add( null ) );
+    }
+
+    public void double_storage_basics( IStorageTypedM<Double> s )
+    {
+        assertEquals( s.size(), 0 );
+
+        s.ensureCapacity( 1 );
+        assertTrue( s.capacity() >= 1 );
+        assertEquals( 0, s.size() );
+
+        s.setSize( 2 );
+        assertEquals( s.size(), 2 );
+        assertTrue( s.capacity() >= 2 );
+        assertEquals( Double.valueOf( 0.0 ), s.get( 0 ) );
+        
+        s.set( 0, 1.0 );
+        assertEquals( Double.valueOf( 1.0 ), s.get( 0 ) );
+
+        assertThrows( NullPointerException.class, () -> s.set( 0, null) );
+
+        s.ensureCapacity( 100 );
+        assertEquals( Double.valueOf( 1.0 ), s.get( 0 ) );
+
+        s.add( 3.0 );
+        assertEquals( 3, s.size() );
+        assertEquals( Double.valueOf( 3.0 ) , s.get( 2 ) );
+
+        assertThrows( NullPointerException.class, () -> s.add( null ) );
+    }
+
+
+    @Test
+    public void colStorageInt_basics() {
+
+        IStorageTypedM<Integer> s = new ColStorageInt( 0 );
+        int_storage_basics( s );
+    }
+
+    @Test
+    public void colStorageInteger_basics() {
+        IStorageTypedM<Integer> s = new ColStorage<Integer>( 0, 0 );
+        int_storage_basics( s );
+    }
+
+    @Test
+    public void colStorageDouble_basics() {
+        IStorageTypedM<Double> s = new ColStorage<Double>( 0, 0.0 );
+        double_storage_basics( s );
     }
 
     @Test
     public void colStorageAdapter_basics() {
-        IStorageM s = StorageFactory.make( tInt().getType() );
+        IStorageM s = new ColStorageAdapter< Integer >( new ColStorageInt( 0 ) );
 
-        assertEquals( s.size(), 0);
+        assertEquals( s.size(), 0 );
 
-        s.ensureCapacity(1);
+        s.ensureCapacity( 1 );
         assertTrue( s.capacity() >= 1 );
 
         s.setSize( 2 );
@@ -83,12 +141,17 @@ public class Tests {
         assertTrue( s.capacity() >= 2 );
         
         assertEquals( s.get( 0 ), 0 );
-        
+
         s.set(0, 1);
         assertEquals( s.get( 0 ), 1 );
 
         s.ensureCapacity( 100 );
         assertEquals( s.get(0), 1 );
+    }
+
+    @Test
+    public void storageFactory_basics() {
+
     }
 
     @Test
@@ -106,6 +169,13 @@ public class Tests {
 
         rb.set( 0, 1, 2.0 );
         assertEquals( 2.0, rb.get( 0, 1 ) );
+
+        rb.set( 0, 0, 1 );
+        assertEquals( 1, rb.get( 0, 0 ) );
+
+        assertThrows( Exception.class, () -> rb.set( 0, 0, null ) );
+        assertThrows( Exception.class, () -> rb.set( 0, 1, null ) );
+
     }
 
 }
