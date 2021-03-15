@@ -50,7 +50,7 @@ public final class RelBuilder {
             ++m_size;
         } else {
             throw new IllegalArgumentException(
-                "Number of supplied values does nto match number of columns" );
+                "Number of supplied values does not match number of columns" );
         }
     }
 
