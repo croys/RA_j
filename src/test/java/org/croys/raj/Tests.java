@@ -18,34 +18,34 @@ import static org.croys.raj.TypeT.*;
 public class Tests {
 
     // FIXME: appropriate logging
-    List<ColDef> cols = List.of(
+    List<ColDef> cols0 = List.of(
         colDef( "A", INT ),
         colDef( "B", DOUBLE )
     );    
 
-    List<ColDef> cols2 = List.of(
+    List<ColDef> cols1 = List.of(
         colDef( "A", INT ),
         colDef( "B", DOUBLE )
     );
 
-    List<ColDef> cols3 = List.of(
+    List<ColDef> cols2 = List.of(
         colDef( "B", DOUBLE ),
         colDef( "A", INT )
     );
 
     @Test
     public void colDef_basics() {
-        assertEquals( cols, cols );
-        assertTrue( cols != cols2 );
-        assertEquals( cols, cols2 );
-        assertEquals( cols2, cols );
+        assertEquals( cols0, cols0 );
+        assertTrue( cols0 != cols1 );
+        assertEquals( cols0, cols1 );
+        assertEquals( cols1, cols0 );
 
-        assertNotEquals(cols, cols3);
-        assertNotEquals(cols3, cols);
+        assertNotEquals(cols0, cols2 );
+        assertNotEquals( cols2, cols0 );
 
-        assertEquals( "[A : INT, B : DOUBLE]", cols.toString() );
-        assertEquals( cols.toString(), cols2.toString() );
-        assertEquals( "[B : DOUBLE, A : INT]", cols3.toString() );
+        assertEquals( "[A : INT, B : DOUBLE]", cols0.toString() );
+        assertEquals( cols0.toString(), cols1.toString() );
+        assertEquals( "[B : DOUBLE, A : INT]", cols2.toString() );
     }
 
 
@@ -169,9 +169,9 @@ public class Tests {
 
     @Test
     public void relBuilder_basics() {
-        RelBuilder rb = new RelBuilder(cols);
-        assertEquals( cols, rb.cols() );
-        assertEquals( 0, rb.size());
+        RelBuilder rb = new RelBuilder( cols0 );
+        assertEquals( cols0, rb.cols() );
+        assertEquals( 0, rb.size() );
 
         Object vals[] = { 1, 1.0 };
         rb.add( Arrays.asList( vals ) );
@@ -189,6 +189,42 @@ public class Tests {
         assertThrows( Exception.class, () -> rb.set( 0, 0, null ) );
         assertThrows( Exception.class, () -> rb.set( 0, 1, null ) );
 
+    }
+
+    RelType rty0 = new RelType( cols0 );
+    RelType rty1 = new RelType( cols1 );
+    RelType rty2 = new RelType( cols2 );
+    RelType rty_empty = new RelType( List.of() );
+
+    @Test
+    public void relTy_basics() {
+
+        assertEquals( rty0, rty0 );
+        assertEquals( rty1, rty1 );
+        assertEquals( rty0, rty1 );
+        assertEquals( rty1, rty0 );
+        assertEquals( rty0, rty2 );
+        assertEquals( rty2, rty0 );
+
+        assertEquals( "RelType [A : INT, B : DOUBLE]", rty0.toString() );
+
+        assertEquals( rty_empty, rty_empty );
+        assertEquals( "RelType []", rty_empty.toString() );
+
+        assertNotEquals( rty_empty, rty0 );
+        assertNotEquals( rty0, rty_empty );
+        assertNotEquals( rty_empty, rty1 );
+        assertNotEquals( rty1, rty_empty );
+        assertNotEquals( rty_empty, rty2 );
+        assertNotEquals( rty2, rty_empty );
+    }
+
+    @Test
+    public void relTy_ops() {
+        assertEquals( rty_empty, RelType.union( rty_empty, rty_empty ) );
+        assertEquals( rty0, RelType.union( rty0, rty_empty ) );
+        assertEquals( rty0, RelType.union( rty_empty, rty0 ) );
+        assertEquals( rty0, RelType.union( rty0, rty0 ) );
     }
 
 }
