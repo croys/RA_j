@@ -108,7 +108,7 @@ public class Relation implements
 
     public static IRelation fromBuilder( RelBuilder builder )
     {
-        return new Relation( builder.cols(), builder.getStorage() );
+        return new Relation( builder.cols(), builder.takeStorage() );
     }
 
     private RelType             m_ty;

@@ -1,20 +1,16 @@
 package org.croys.raj;
 
-import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 public final class RelBuilder {
 
     RelBuilder( List<ColDef> cols )
     {
         m_col_defs  = cols;
-        m_size      = 0;
-
-        m_cols = new Vector<IStorageM>();
-        for (ColDef def : cols) {
-            m_cols.add( StorageFactory.make( def.type() ) );
-        }
+        clear();
     }
 
     public List<ColDef> cols()
@@ -32,20 +28,16 @@ public final class RelBuilder {
         return m_cols.get( c ).get( r );
     }
 
-    public <T, U extends Iterable<T>> RelBuilder add( U vals )
+    public < T, U extends Collection<T> > RelBuilder add( U vals )
     {
-        Iterator<T> iter = vals.iterator();
-        int n_elems = 0;
-        while (iter.hasNext()) {
-            iter.next();
-            ++n_elems;
-        }
-        if (n_elems == m_col_defs.size()) {
-            iter = vals.iterator();
-            Iterator<IStorageM> colIter = m_cols.iterator();
+        var n_elems = vals.stream().count();
+
+        // FIXME: use stream zipper in Guava
+        if ( n_elems == m_col_defs.size() ) {
+            var iter = vals.iterator();
+            var colIter = m_cols.iterator();
             while ( iter.hasNext() ) {
-                IStorageM col = colIter.next();
-                col.add( iter.next() );
+                colIter.next().add( iter.next() );
             }
             ++m_size;
         } else {
@@ -60,14 +52,19 @@ public final class RelBuilder {
         m_cols.get( c ).set( r, val );
     }
 
-    public List< IStorage > getStorage()
+    public void clear()
     {
-        // FIXME: caller should take ownership
-        // map would make this easier...
-        Vector<IStorage> v = new Vector<IStorage>( m_cols.size() );
-        for ( IStorageM s : m_cols ) {
-            v.add( (IStorage)s );
-        }
+        m_size = 0;
+        m_cols = m_col_defs.stream().map(
+                cd -> StorageFactory.make( cd.type() )
+            ).collect( Collectors.toCollection( Vector::new ) );
+    }
+
+    public List< IStorage > takeStorage()
+    {
+        var v = m_cols.stream().map( s -> (IStorage)s )
+            .collect( Collectors.toCollection( Vector::new ) );
+        clear();
         return (List<IStorage>)v;
     }
 
