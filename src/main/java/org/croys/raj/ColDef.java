@@ -42,7 +42,7 @@ public final class ColDef
     @Override
     public final boolean equals( Object o )
     {
-        ColDef cd = (ColDef)o;
+        var cd = (ColDef)o;
         return m_name.equals( cd.m_name ) && m_ty.equals( cd.m_ty );
     }
 

@@ -90,7 +90,7 @@ public final class ColStorageInt
         _ensureCapacity( m_size + len );
         int j = to_start;
         if ( ColStorageInt.class.isInstance( from ) ) {
-            ColStorageInt col = ColStorageInt.class.cast( from );
+            var col = ColStorageInt.class.cast( from );
             for ( int i = from_start; i < from_end; ++i ) {
                 m_storage[ j++ ] = col.m_storage[ i ];
             }

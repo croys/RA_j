@@ -92,7 +92,7 @@ public class ColStorageDouble
         _ensureCapacity( m_size + len );
         int j = to_start;
         if ( ColStorageDouble.class.isInstance( from ) ) {
-            ColStorageDouble col = ColStorageDouble.class.cast( from );
+            var col = ColStorageDouble.class.cast( from );
             for ( int i = from_start; i < from_end; ++i ) {
                 m_storage[ j++ ] = col.m_storage[ i ];
             }

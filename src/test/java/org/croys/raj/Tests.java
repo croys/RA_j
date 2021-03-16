@@ -11,6 +11,12 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import java.io.Writer;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+
 import static org.croys.raj.Type.*;
 import static org.croys.raj.ColDef.*;
 import static org.croys.raj.TypeT.*;
@@ -18,17 +24,17 @@ import static org.croys.raj.TypeT.*;
 public class Tests {
 
     // FIXME: appropriate logging
-    List<ColDef> cols0 = List.of(
+    final List<ColDef> cols0 = List.of(
         colDef( "A", INT ),
         colDef( "B", DOUBLE )
     );    
 
-    List<ColDef> cols1 = List.of(
+    final List<ColDef> cols1 = List.of(
         colDef( "A", INT ),
         colDef( "B", DOUBLE )
     );
 
-    List<ColDef> cols2 = List.of(
+    final List<ColDef> cols2 = List.of(
         colDef( "B", DOUBLE ),
         colDef( "A", INT )
     );
@@ -110,25 +116,25 @@ public class Tests {
     @Test
     public void colStorageInt_basics() {
 
-        IStorageTypedM<Integer> s = new ColStorageInt( 0 );
+        var s = new ColStorageInt( 0 );
         int_storage_basics( s );
     }
 
     @Test
     public void colStorageInteger_basics() {
-        IStorageTypedM<Integer> s = new ColStorage<Integer>( 0, 0 );
+        var s = new ColStorage<Integer>( 0, 0 );
         int_storage_basics( s );
     }
 
     @Test
     public void colStorageDouble_basics() {
-        IStorageTypedM<Double> s = new ColStorage<Double>( 0, 0.0 );
+        var s = new ColStorage<Double>( 0, 0.0 );
         double_storage_basics( s );
     }
 
     @Test
     public void colStorageDoubleArray_basics() {
-        IStorageTypedM<Double> s = new ColStorageDouble( 0 );
+        var s = new ColStorageDouble( 0 );
         double_storage_basics( s );
     }
 
@@ -157,23 +163,23 @@ public class Tests {
     @Test
     public void storageFactory_basics() {
         {
-            IStorageTypedM<Integer> s = StorageFactory.makeT( tInt() );
+            var s = StorageFactory.makeT( tInt() );
             int_storage_basics( s );
         }
         {
-            IStorageTypedM<Double> s = StorageFactory.makeT( tDouble() );
-            double_storage_basics(s);
+            var s = StorageFactory.makeT( tDouble() );
+            double_storage_basics( s );
         }
 
     }
 
     @Test
     public void relBuilder_basics() {
-        RelBuilder rb = new RelBuilder( cols0 );
+        var rb = new RelBuilder( cols0 );
         assertEquals( cols0, rb.cols() );
         assertEquals( 0, rb.size() );
 
-        Object vals[] = { 1, 1.0 };
+        final Object vals[] = { 1, 1.0 };
         rb.add( Arrays.asList( vals ) );
 
         assertEquals( 1, rb.size() );
@@ -191,10 +197,10 @@ public class Tests {
 
     }
 
-    RelType rty0 = new RelType( cols0 );
-    RelType rty1 = new RelType( cols1 );
-    RelType rty2 = new RelType( cols2 );
-    RelType rty_empty = new RelType( List.of() );
+    final RelType rty0      = new RelType( cols0 );
+    final RelType rty1      = new RelType( cols1 );
+    final RelType rty2      = new RelType( cols2 );
+    final RelType rty_empty = new RelType( List.of() );
 
     @Test
     public void relTy_basics() {
@@ -217,6 +223,11 @@ public class Tests {
         assertNotEquals( rty1, rty_empty );
         assertNotEquals( rty_empty, rty2 );
         assertNotEquals( rty2, rty_empty );
+
+        var repeated = List.of(
+            colDef( "A", INT ), colDef( "A", INT )
+        );
+        assertThrows( IllegalArgumentException.class, () -> new RelType( repeated ) );
     }
 
     @Test
@@ -225,6 +236,71 @@ public class Tests {
         assertEquals( rty0, RelType.union( rty0, rty_empty ) );
         assertEquals( rty0, RelType.union( rty_empty, rty0 ) );
         assertEquals( rty0, RelType.union( rty0, rty0 ) );
+        assertEquals( rty0, RelType.union( rty0, rty1 ) );
+        assertEquals( rty0, RelType.union( rty1, rty0 ) );
+        assertEquals( rty0, RelType.union( rty0, rty2 ) );
+        assertEquals( rty0, RelType.union( rty2, rty0 ) );
+
+        var rty_conflict = new RelType( List.of( colDef( "A", DOUBLE ) ) );
+        assertThrows( IllegalArgumentException.class,
+            () -> RelType.union( rty0, rty_conflict )
+        );
+        assertThrows( IllegalArgumentException.class,
+            () -> RelType.union( rty_conflict, rty0 )
+        );
     }
 
+    static final IRelation dee = Relation.dee();
+    static final IRelation dum = Relation.dum();
+
+    @Test
+    public void table_writer() throws IOException
+    {
+        var wr = new StringWriter( 1024 );
+
+        TableWriter.write( wr, dee );
+        assertEquals( "", wr.toString() );
+
+        wr = new StringWriter( 1024 );
+        TableWriter.write( wr, dum );
+        assertEquals( "", wr.toString() );
+
+        wr = new StringWriter( 1024 );
+        var builder = new RelBuilder( cols0 )
+                        .add( List.of( 1, 1.0 ) )
+                        .add( List.of( 2, 2.0 ) );
+        IRelation r = Relation.fromBuilder( builder );
+
+        TableWriter.write( wr, r );
+        assertEquals( "A B  \n1 1.0\n2 2.0\n", wr.toString() );
+    }
+
+
+    @Test
+    public void relation_basics() throws IOException
+    {
+        assertEquals( 1, dee.rows() );
+        assertEquals( 0, dee.cols() );
+        assertEquals( 0, dee.type().cols().size() );
+
+        assertEquals( 0, dum.rows() );
+        assertEquals( 0, dum.cols() );
+        assertEquals( 0, dum.type().cols().size() );
+
+        var builder = new RelBuilder( cols0 );
+        builder.add( List.of( 1, 1.0 ) );
+
+        var r = Relation.fromBuilder( builder );
+
+        assertEquals( 2, r.cols() );
+        assertEquals( 1, r.rows() );
+        assertEquals( 1, r.get( 0, 0 ) );
+        assertEquals( 1.0, r.get( 0, 1 ) );
+
+        System.out.println( "Test" );
+
+        var out = new BufferedWriter( new OutputStreamWriter( System.out ) );
+        TableWriter.write( out, r );
+        out.flush();
+    }
 }

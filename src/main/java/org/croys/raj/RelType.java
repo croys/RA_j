@@ -18,8 +18,8 @@ public class RelType
     RelType( List<ColDef> cols )
     {
         m_cols = new Vector<ColDef>();
-        HashSet<String> col_names = new HashSet<String>();
-        for (ColDef cd : cols) {
+        var col_names = new HashSet<String>();
+        for ( var cd : cols) {
             if ( col_names.contains( cd.name() ) ) {
                 throw new IllegalArgumentException(
                     "Repeated column: " + cd.name()
@@ -53,7 +53,7 @@ public class RelType
     @Override
     public final boolean equals( Object o )
     {
-        RelType r_ty = (RelType)o;
+        var r_ty = (RelType)o;
         return m_cols.equals( r_ty.m_cols );
     }
 
@@ -61,18 +61,18 @@ public class RelType
 
     public final static RelType union( RelType a, RelType b )
     {
-        RelType r = new RelType();
+        var r = new RelType();
         r.m_cols.addAll( a.m_cols );
 
-        HashMap< String, Type > a_map = new HashMap< String, Type >();
-        for ( ColDef cd : a.m_cols ) {
+        var a_map = new HashMap< String, Type >();
+        for ( var cd : a.m_cols ) {
             a_map.put( cd.name(), cd.type() );
         }
 
-        for ( ColDef cd : b.m_cols ) {
-            String b_name = cd.name();
-            Type b_ty = cd.type();
-            Type a_ty = a_map.get( b_name );
+        for ( var cd : b.m_cols ) {
+            var b_name = cd.name();
+            var b_ty = cd.type();
+            var a_ty = a_map.get( b_name );
             if ( a_ty == null ) {
                 r.m_cols.add( cd );
             } else if ( !a_ty.equals( b_ty ) ) {

@@ -32,7 +32,7 @@ public final class RelBuilder {
         return m_cols.get( c ).get( r );
     }
 
-    public <T, U extends Iterable<T>> void add( U vals )
+    public <T, U extends Iterable<T>> RelBuilder add( U vals )
     {
         Iterator<T> iter = vals.iterator();
         int n_elems = 0;
@@ -52,6 +52,7 @@ public final class RelBuilder {
             throw new IllegalArgumentException(
                 "Number of supplied values does not match number of columns" );
         }
+        return this;
     }
 
     public void set( int r, int c, Object val )
@@ -59,6 +60,16 @@ public final class RelBuilder {
         m_cols.get( c ).set( r, val );
     }
 
+    public List< IStorage > getStorage()
+    {
+        // FIXME: caller should take ownership
+        // map would make this easier...
+        Vector<IStorage> v = new Vector<IStorage>( m_cols.size() );
+        for ( IStorageM s : m_cols ) {
+            v.add( (IStorage)s );
+        }
+        return (List<IStorage>)v;
+    }
 
     private int                 m_size;
     private List<ColDef>        m_col_defs;
