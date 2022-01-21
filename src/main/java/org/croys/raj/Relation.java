@@ -29,7 +29,7 @@ public class Relation implements
 
         if ( n != m ) {
             throw new IllegalArgumentException(
-                "Column definitions do not mactch column storage"
+                "Column definitions do not match column storage"
             );
         }
         m_cols = n;
@@ -57,7 +57,7 @@ public class Relation implements
             if ( m_storage.get( i ).size() != rows ) {
                 throw new IllegalArgumentException(
                     "Storage for column " + i
-                    + " has inconsisten size");
+                    + " has inconsistent size");
             }
         }
         m_rows = rows;
